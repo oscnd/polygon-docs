@@ -1,0 +1,22 @@
+# development
+.vscode
+.idea
+
+# environment
+.env
+
+# local
+.local
+
+# operating system
+.DS_Store
+
+# dependency
+node_modules
+dist
+build
+*.log
+
+# library
+/docs/.vitepress/*
+!/docs/.vitepress/config.ts
