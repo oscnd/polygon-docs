@@ -1,4 +1,3 @@
-import { generateSidebar } from "vitepress-sidebar";
 import { withMermaid } from "vitepress-plugin-mermaid";
 
 export default withMermaid({
@@ -9,19 +8,20 @@ export default withMermaid({
     nav: [
       { text: "Home", link: "/" },
       { text: "Architecture", link: "/architecture/" },
+      { text: "Usage", link: "/usage/" },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/oscnd/polygon" }],
-    sidebar: generateSidebar([
-      {
-        documentRootPath: "docs",
-        scanStartPath: "architecture",
-        basePath: "/architecture/",
-        resolvePath: "/architecture/",
-        collapsed: false,
-        capitalizeFirst: true,
-        useTitleFromFileHeading: true,
-      },
-    ]),
+    sidebar: {
+      "/usage/": [
+        {
+          text: "Setup",
+          items: [
+            { text: "Installation", link: "/usage/01_setup/01_installation" },
+            { text: "Configuration", link: "/usage/01_setup/02_configuration" },
+          ],
+        },
+      ],
+    },
     search: {
       provider: "local",
     },
