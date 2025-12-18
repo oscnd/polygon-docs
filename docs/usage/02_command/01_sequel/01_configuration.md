@@ -189,7 +189,7 @@ tables:
     - `base` (default): included in base model
     - `none`: excluded from models (e.g., sensitive data)
   - **feature** is an array of additional processing features (e.g., `sort`, `filter`) which adds to generated
-    queriers (see [Query Features](./03_query_features.md) for details)
+    queriers
 
 - **additions**
 

@@ -11,7 +11,7 @@ In the Go project's working directory (same directory as `go.mod` file), create 
     ├── polygon.yml
     ├── interface.yml
     ├── sequel.yml
-    └── ...
+    └── …
 ```
 
 ## Configuration
