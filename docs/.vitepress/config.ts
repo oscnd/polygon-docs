@@ -20,6 +20,20 @@ export default withMermaid({
             { text: "Configuration", link: "/usage/01_setup/02_configuration" },
           ],
         },
+        {
+          text: "Command",
+          items: [
+            {
+              text: "sequel",
+              items: [
+                {
+                  text: "Configuration",
+                  link: "/usage/02_command/01_sequel/01_configuration",
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
     search: {
