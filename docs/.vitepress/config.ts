@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
 
 export default defineConfig({
@@ -31,17 +31,22 @@ export default defineConfig({
                   text: "Configuration",
                   link: "/usage/02_command/01_sequel/01_configuration",
                 },
+                {
+                  text: "Querier",
+                  link: "/usage/02_command/01_sequel/02_querier",
+                },
               ],
             },
           ],
         },
       ],
     },
+    outline: "deep",
     search: {
       provider: "local",
     },
   },
   vite: {
-    plugins: [llmstxt()]
-  }
-})
+    plugins: [llmstxt()],
+  },
+});

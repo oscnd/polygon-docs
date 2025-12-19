@@ -258,7 +258,8 @@ Running `pol database sequel schema` generates the following files and directori
 
 ### Schema Summary
 
-For each connection with migration files declared, polygon will generate consolidated database schema from all migration files at `generate/polygon/sequel/{connection}.sql`
+For each connection with migration files declared, polygon will generate consolidated database schema from all migration
+files at `generate/polygon/sequel/{connection}.sql`
 
 ::: details Original Migration Files
 **001_create_users.sql**
@@ -268,12 +269,12 @@ For each connection with migration files declared, polygon will generate consoli
 -- +goose StatementBegin
 CREATE TABLE users
 (
-    id BIGSERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    id            BIGSERIAL PRIMARY KEY,
+    username      VARCHAR(255) NOT NULL UNIQUE,
+    email         VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(128) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 -- +goose StatementEnd
 …
@@ -285,7 +286,8 @@ CREATE TABLE users
 -- +goose Up
 -- +goose StatementBegin
 ALTER TABLE users
-    ALTER password_hash TYPE VARCHAR(255),
+ALTER
+password_hash TYPE VARCHAR(255),
 ADD COLUMN metadata JSONB NOT NULL DEFAULT '{}';
 -- +goose StatementEnd
 …
@@ -298,14 +300,15 @@ ADD COLUMN metadata JSONB NOT NULL DEFAULT '{}';
 -- database schema: postgres
 -- dialect: postgres
 
-CREATE TABLE users (
-    id BIGSERIAL NOT NULL,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
+CREATE TABLE users
+(
+    id            BIGSERIAL    NOT NULL,
+    username      VARCHAR(255) NOT NULL UNIQUE,
+    email         VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    metadata JSONB NOT NULL,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    metadata      JSONB        NOT NULL,
     PRIMARY KEY (id)
 );
 …
@@ -313,7 +316,8 @@ CREATE TABLE users (
 
 ### Model Variants
 
-Each table generates multiple Go model structs based on field inclusion and additions configuration at `generate/polygon/model/{connection}.{table}.go`.
+Each table generates multiple Go model structs based on field inclusion and additions configuration at
+`generate/polygon/model/{connection}.{table}.go`.
 Each struct serves different use-cases:
 
 | Variant        | Suffix        | Description                                      |
@@ -388,13 +392,14 @@ type UserParented struct {
 
 ### SQL Queries
 
-For each table, polygon generates SQLC querier files at `generate/polygon/sequel/{connection}/{table}.sql` with standard queries:
+For each table, polygon generates SQLC querier files at `generate/polygon/sequel/{connection}/{table}.sql` with standard
+queries:
 
 | Variant      | Suffix        | Description                                |
-|--------------|---------------|--------------------------------------------|
+| ------------ | ------------- | ------------------------------------------ |
 | Count        | `Count`       | Count total records                        |
-| Create       | `Create`      | Insert new record                          |
-| Update       | `Update`      | Update existing record                     |
+| Create       | `Create`      | Insert and return new record               |
+| Update       | `Update`      | Update and return existing record          |
 | One          | `One`         | Fetch single record by primary key         |
 | One Counted  | `OneCounted`  | Fetch single record with related counts    |
 | One With     | `OneWith…`    | Fetch single record with related joins     |
@@ -410,58 +415,62 @@ For each table, polygon generates SQLC querier files at `generate/polygon/sequel
 -- table: user
 
 -- name: UserCount :one
-SELECT COALESCE(COUNT(*), 0)::BIGINT AS user_count
+SELECT COALESCE(COUNT(*), 0) ::BIGINT AS user_count
 FROM users;
 
 -- name: UserCreate :one
 INSERT INTO users (oid, username, email, password_hash, totp_secret, is_active, metadata)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-RETURNING *;
+VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
 
 -- name: UserUpdate :one
 UPDATE users
-SET oid = COALESCE(sqlc.narg('oid'), oid),
-    username = COALESCE(sqlc.narg('username'), username),
-    email = COALESCE(sqlc.narg('email'), email),
+SET oid           = COALESCE(sqlc.narg('oid'), oid),
+    username      = COALESCE(sqlc.narg('username'), username),
+    email         = COALESCE(sqlc.narg('email'), email),
     password_hash = COALESCE(sqlc.narg('password_hash'), password_hash),
-    totp_secret = COALESCE(sqlc.narg('totp_secret'), totp_secret),
-    is_active = COALESCE(sqlc.narg('is_active'), is_active),
-    metadata = COALESCE(sqlc.narg('metadata'), metadata)
+    totp_secret   = COALESCE(sqlc.narg('totp_secret'), totp_secret),
+    is_active     = COALESCE(sqlc.narg('is_active'), is_active),
+    metadata      = COALESCE(sqlc.narg('metadata'), metadata)
 WHERE users.id = sqlc.narg('id')::BIGINT
 RETURNING *;
 
 -- name: UserOne :one
-SELECT * FROM users WHERE id = $1 LIMIT 1;
+SELECT *
+FROM users
+WHERE id = $1 LIMIT 1;
 
 -- name: UserOneCounted :one
 SELECT sqlc.embed(users),
-       (SELECT COALESCE(COUNT(*), 0)::BIGINT FROM profiles WHERE profiles.user_id = users.id) AS profile_count
+       (SELECT COALESCE(COUNT(*), 0) ::BIGINT FROM profiles WHERE profiles.user_id = users.id) AS profile_count
 FROM users
-WHERE users.id = $1
-LIMIT 1;
+WHERE users.id = $1 LIMIT 1;
 
 -- name: UserMany :many
-SELECT * FROM users WHERE id = ANY(sqlc.narg('ids')::BIGINT[]);
+SELECT *
+FROM users
+WHERE id = ANY (sqlc.narg('ids')::BIGINT[]);
 
 -- name: UserManyCounted :many
 SELECT sqlc.embed(users),
-       (SELECT COALESCE(COUNT(*), 0)::BIGINT FROM profiles WHERE profiles.user_id = users.id) AS profile_count
+       (SELECT COALESCE(COUNT(*), 0) ::BIGINT FROM profiles WHERE profiles.user_id = users.id) AS profile_count
 FROM users
-WHERE id = ANY(sqlc.narg('ids')::BIGINT[]);
+WHERE id = ANY (sqlc.narg('ids')::BIGINT[]);
 
 -- name: UserList :many
 SELECT sqlc.embed(users)
-FROM users
-LIMIT sqlc.narg('limit')::BIGINT
+FROM users LIMIT sqlc.narg('limit')::BIGINT
 OFFSET COALESCE(sqlc.narg('offset')::BIGINT, 0);
 
 -- name: UserDelete :one
-DELETE FROM users WHERE id = $1 RETURNING *;
+DELETE
+FROM users
+WHERE id = $1 RETURNING *;
 ```
 
 ::: tip Auto-generated Configuration
 
-If `sequel.yml` doesn't exist, the command automatically generates it with all tables and fields discovered from migrations. All fields default to `include: base`.
+If `sequel.yml` doesn't exist, the command automatically generates it with all tables and fields discovered from
+migrations. All fields default to `include: base`.
 
 After generation, customize `sequel.yml` to:
 
