@@ -1,6 +1,7 @@
-import { withMermaid } from "vitepress-plugin-mermaid";
+import { defineConfig } from 'vitepress'
+import llmstxt from "vitepress-plugin-llms";
 
-export default withMermaid({
+export default defineConfig({
   title: "Polygon",
   description: "Prismatic Go ecosystem where magic snaps into seamless harmony",
   head: [],
@@ -40,6 +41,7 @@ export default withMermaid({
       provider: "local",
     },
   },
-  mermaid: {},
-  mermaidPlugin: {},
-});
+  vite: {
+    plugins: [llmstxt()]
+  }
+})
