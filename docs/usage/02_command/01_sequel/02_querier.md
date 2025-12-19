@@ -415,7 +415,7 @@ The sort feature provides dynamic sorting with the following behavior:
 **Usage Examples:**
 
 | Description                    | `sort` Parameter | `order` Parameter |
-|--------------------------------|------------------|-------------------|
+| ------------------------------ | ---------------- | ----------------- |
 | Sort by visit count descending | `visit_count`    | `desc`            |
 | Sort by display name ascending | `display_name`   | `asc`             |
 | Use default sorting            | _null_           | _null_            |
@@ -702,7 +702,9 @@ tables:
 
 :::
 
-## Composite Primary Keys
+## Query Parameters
+
+###  Composite Primary Keys
 
 Tables with composite primary keys are handled automatically, with queriers adapted for multiple key columns.
 
@@ -752,21 +754,7 @@ DELETE FROM post_reactions
 WHERE (post_id = $1 AND profile_id = $2) RETURNING *;
 ```
 
-```yml [Configuration]
-tables:
-  post_reactions:
-    fields:
-      - name: post_id
-        include: base
-      - name: profile_id
-        include: base
-      - name: reaction_name
-        include: base
-```
-
 :::
-
-## Query Parameters
 
 ### Named Parameters
 
