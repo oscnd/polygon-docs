@@ -29,3 +29,6 @@ initializers:
 ```
 
 For other configuration files, refer to their respective documentation pages:
+
+- [Sequel Configuration](../02_command/01_sequel/01_configuration.md)
+- [Interface Configuration](../02_command/02_interface/01_usage.md)

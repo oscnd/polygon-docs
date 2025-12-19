@@ -37,6 +37,15 @@ export default defineConfig({
                 },
               ],
             },
+            {
+              text: "interface",
+              items: [
+                {
+                  text: "Usage",
+                  link: "/usage/02_command/02_interface/01_usage",
+                },
+              ],
+            },
           ],
         },
       ],

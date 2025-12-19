@@ -704,7 +704,7 @@ tables:
 
 ## Query Parameters
 
-###  Composite Primary Keys
+### Composite Primary Keys
 
 Tables with composite primary keys are handled automatically, with queriers adapted for multiple key columns.
 
